@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>College Canteen - QR Generator</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ff6b35, #ff914d);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+h1 {
+    color: #ff6b35;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #ff6b35;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+button:hover {
+    background: #e95420;
+}
+
+.download {
+    background: #222;
+}
+
+.download:hover {
+    background: #000;
+}
+
+.qr-container {
+    margin-top: 25px;
+    padding: 20px;
+    border: 2px dashed #ddd;
+    border-radius: 15px;
+    display: none;
+}
+
+#qrcode {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+#qrcode img {
+    max-width: 100%;
+}
+
+.url-display {
+    word-break: break-all;
+    color: #555;
+    font-size: 13px;
+}
+
+.instructions {
+    margin-top: 25px;
+    text-align: left;
+    background: #fff4ef;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.instructions h3 {
+    color: #ff6b35;
+    margin-bottom: 10px;
+}
+
+.instructions p {
+    margin: 7px 0;
+    font-size: 14px;
+}
+
+.success {
+    color: #198754;
+    font-weight: bold;
+    margin-top: 10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<h1>🍴 College Canteen</h1>
+
+<p class="subtitle">
+    Customer Ordering QR Code
+</p>
+
+<input
+    type="url"
+    id="customerURL"
+    placeholder="Enter customer page URL"
+    value="https://your-website.com/customer.html"
+>
+
+<button onclick="generateQR()">
+    🔳 Generate QR Code
+</button>
+
+<div class="qr-container" id="qrContainer">
+
+    <h2>📱 Scan to Order</h2>
+
+    <div id="qrcode"></div>
+
+    <p class="url-display" id="urlDisplay"></p>
+
+    <button
+        class="download"
+        onclick="downloadQR()">
+        ⬇️ Download QR Code
+    </button>
+
+    <p class="success" id="successMessage"></p>
+
+</div>
+
+<div class="instructions">
+
+    <h3>📋 How Students Use It</h3>
+
+    <p>1️⃣ Open the phone camera.</p>
+
+    <p>2️⃣ Point the camera at this QR code.</p>
+
+    <p>3️⃣ Tap the notification/link.</p>
+
+    <p>4️⃣ Customer ordering page opens.</p>
+
+    <p>5️⃣ Select food and place the preorder.</p>
+
+</div>
+```
+
+</div>
+
+<!-- QR Code Library -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+
+let qrCode;
+
+function generateQR() {
+
+    const url =
+        document.getElementById("customerURL").value.trim();
+
+    if (!url) {
+
+        alert("Please enter your customer page URL.");
+
+        return;
+    }
+
+    try {
+
+        new URL(url);
+
+    } catch (error) {
+
+        alert(
+            "Please enter a valid URL.\n\nExample:\nhttps://yourwebsite.com/customer.html"
+        );
+
+        return;
+    }
+
+
+    const qrContainer =
+        document.getElementById("qrcode");
+
+    qrContainer.innerHTML = "";
+
+
+    qrCode = new QRCode(qrContainer, {
+
+        text: url,
+
+        width: 280,
+
+        height: 280,
+
+        colorDark: "#000000",
+
+        colorLight: "#ffffff",
+
+        correctLevel: QRCode.CorrectLevel.H
+
+    });
+
+
+    document.getElementById("urlDisplay").textContent =
+        url;
+
+
+    document.getElementById("qrContainer")
+        .style.display = "block";
+
+
+    document.getElementById("successMessage")
+        .textContent =
+        "✅ QR code generated successfully!";
+
+}
+
+
+function downloadQR() {
+
+    const qrImage =
+        document.querySelector("#qrcode img");
+
+    if (!qrImage) {
+
+        alert("Generate the QR code first.");
+
+        return;
+    }
+
+
+    const link =
+        document.createElement("a");
+
+    link.href = qrImage.src;
+
+    link.download =
+        "college-canteen-customer-qr.png";
+
+    link.click();
+
+}
+
+</script>
+
+</body>
+</html>
